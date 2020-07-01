@@ -1,7 +1,10 @@
 package com.ridvankabak.mvvm.ui.auth
 
 import android.view.View
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ridvankabak.mvvm.data.repositories.UserRepository
 
 class AuthViewModel : ViewModel() {
 
@@ -14,10 +17,12 @@ class AuthViewModel : ViewModel() {
         authListener?.onStarted()
 
         if(email.isNullOrEmpty() || password.isNullOrEmpty()){
+
             authListener?.onFailure("Invalid email or password")
             return
         }
-        authListener?.onSuccess()
-        //Success
+        val loginResponse = UserRepository().userLogin(email!!,password!!)
+        authListener?.onSuccess(loginResponse)
+
     }
 }
